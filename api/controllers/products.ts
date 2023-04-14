@@ -4,12 +4,6 @@ import Product from "../models/product";
 import { IProduct } from "../../types/productsMongoDbType";
 import { QueryObject } from "../../types/queryObjectTypes";
 
-export const getAllProductsStatic = async (req: Request, res: Response) => {
-  const products = await Product.find({}).sort("name").select("name price");
-
-  res.status(200).json({ products, nbHits: products.length });
-};
-
 export const getAllProducts = async (req: Request, res: Response) => {
   const { featured, company, name, sort, fields, numericFilters } = req.query;
 

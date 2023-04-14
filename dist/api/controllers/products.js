@@ -12,13 +12,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllProducts = exports.getAllProductsStatic = void 0;
+exports.getAllProducts = void 0;
 const product_1 = __importDefault(require("../models/product"));
-const getAllProductsStatic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const products = yield product_1.default.find({}).sort("name").select("name price");
-    res.status(200).json({ products, nbHits: products.length });
-});
-exports.getAllProductsStatic = getAllProductsStatic;
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { featured, company, name, sort, fields, numericFilters } = req.query;
     const queryObject = {};
