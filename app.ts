@@ -1,5 +1,6 @@
 import "dotenv/config";
 import express from "express";
+import "express-async-errors";
 import { connectDB } from "./api/db/connect";
 import { errorHandlerMiddleware } from "./api/middleware/error-handler";
 import { notFound } from "./api/middleware/not-found";

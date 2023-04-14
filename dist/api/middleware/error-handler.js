@@ -14,6 +14,6 @@ const errorHandlerMiddleware = (err, req, res, next) => __awaiter(void 0, void 0
     console.log(err);
     return res
         .status(500)
-        .json({ msg: "Something went wrong, please try again" });
+        .json({ message: "Something went wrong, please try again" });
 });
 exports.errorHandlerMiddleware = errorHandlerMiddleware;
