@@ -1,6 +1,7 @@
-import "dotenv/config";
 import express from "express";
 import "express-async-errors";
+import "dotenv/config";
+import morgan from "morgan";
 import { connectDB } from "./api/db/connect";
 import { errorHandlerMiddleware } from "./api/middleware/error-handler";
 import { notFound } from "./api/middleware/not-found";
@@ -11,6 +12,7 @@ const app = express();
 
 //middleware
 app.use(express.json());
+app.use(morgan("dev"));
 
 //routes
 app.get("/", (req, res) => {

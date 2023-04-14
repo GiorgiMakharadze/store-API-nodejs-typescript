@@ -15,15 +15,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllProducts = exports.getAllProductsStatic = void 0;
 const product_1 = __importDefault(require("../models/product"));
 const getAllProductsStatic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const search = "a";
-    const products = yield product_1.default.find({
-        name: { $regex: search, $options: "i" },
-    });
+    const products = yield product_1.default.find({}).sort("-name price");
     res.status(200).json({ products, nbHits: products.length });
 });
 exports.getAllProductsStatic = getAllProductsStatic;
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { featured, company, name } = req.query;
+    const { featured, company, name, sort } = req.query;
     const queryObject = {};
     if (featured) {
         queryObject.featured = featured === "true" ? true : false;
@@ -34,8 +31,16 @@ const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function*
     if (name) {
         queryObject.name = { $regex: name, $options: "i" };
     }
-    console.log(queryObject);
-    const products = yield product_1.default.find(queryObject);
-    res.status(200).json({ products, nbHits: products.length });
+    let result = product_1.default.find(queryObject);
+    if (sort) {
+        const sortList = sort.split(",").join(" ");
+        result = result.sort(sortList);
+    }
+    else {
+        result = result.sort("createdAt");
+    }
+    //console.log(queryObject);
+    const products = yield result;
+    res.status(200).json({ nbHits: products.length, products });
 });
 exports.getAllProducts = getAllProducts;

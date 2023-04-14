@@ -12,9 +12,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require("dotenv/config");
 const express_1 = __importDefault(require("express"));
 require("express-async-errors");
+require("dotenv/config");
+const morgan_1 = __importDefault(require("morgan"));
 const connect_1 = require("./api/db/connect");
 const error_handler_1 = require("./api/middleware/error-handler");
 const not_found_1 = require("./api/middleware/not-found");
@@ -23,6 +24,7 @@ const port = process.env.PORT || 3000;
 const app = (0, express_1.default)();
 //middleware
 app.use(express_1.default.json());
+app.use((0, morgan_1.default)("dev"));
 //routes
 app.get("/", (req, res) => {
     res.send('<h1>Store api</h1><a href="/api/v1/products">products route</a>');
