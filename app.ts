@@ -17,10 +17,10 @@ app.get("/", (req, res) => {
   res.send('<h1>Store api</h1><a href="/api/v1/products">products route</a>');
 });
 
+//prodcuts route
 app.use("/api/v1/products", productsRouter);
 
-//prodcuts route
-
+//error handling
 app.use(notFound);
 app.use(errorHandlerMiddleware);
 

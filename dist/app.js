@@ -27,8 +27,9 @@ app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send('<h1>Store api</h1><a href="/api/v1/products">products route</a>');
 });
-app.use("/api/v1/products", products_1.default);
 //prodcuts route
+app.use("/api/v1/products", products_1.default);
+//error handling
 app.use(not_found_1.notFound);
 app.use(error_handler_1.errorHandlerMiddleware);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
