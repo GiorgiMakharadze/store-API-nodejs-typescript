@@ -11,7 +11,8 @@ export const getAllProductsStatic = async (req: Request, res: Response) => {
 };
 
 export const getAllProducts = async (req: Request, res: Response) => {
-  const { featured, company, name, sort, fields } = req.query;
+  const { featured, company, name, sort, fields, numericFilters } = req.query;
+
   const queryObject: QueryObject = {};
 
   if (featured) {
@@ -24,6 +25,28 @@ export const getAllProducts = async (req: Request, res: Response) => {
     queryObject.name = { $regex: name, $options: "i" };
   }
 
+  if (numericFilters) {
+    const operatorMap: { [key: string]: string } = {
+      ">": "$gt",
+      ">=": "$gte",
+      "=": "$eq",
+      "<": "$lt",
+      "<=": "$lte",
+    };
+    const regEx = /\b(<|>|>=|=|<|<=)\b/g;
+    let filters: string | string[] | any = (numericFilters as string).replace(
+      regEx,
+      (match) => `-${operatorMap[match]}-`
+    );
+    const options = ["price", "rating"];
+    filters = filters.split(",").forEach((item: any) => {
+      const [field, operator, value] = item.split("-");
+      if (options.includes(field)) {
+        queryObject[field] = { [operator]: Number(value) };
+      }
+    });
+  }
+  console.log(queryObject);
   let result = Product.find(queryObject as FilterQuery<IProduct>);
 
   //sort
