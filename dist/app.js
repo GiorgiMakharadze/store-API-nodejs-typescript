@@ -14,8 +14,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require("dotenv/config");
 const express_1 = __importDefault(require("express"));
+const connect_1 = require("./api/db/connect");
 const error_handler_1 = require("./api/middleware/error-handler");
 const not_found_1 = require("./api/middleware/not-found");
+const products_1 = __importDefault(require("./api/routes/products"));
 const port = process.env.PORT || 3000;
 const app = (0, express_1.default)();
 //middleware
@@ -24,14 +26,16 @@ app.use(express_1.default.json());
 app.get("/", (req, res) => {
     res.send('<h1>Store api</h1><a href="/api/v1/products">products route</a>');
 });
+app.use("/api/v1/products", products_1.default);
 //prodcuts route
 app.use(not_found_1.notFound);
 app.use(error_handler_1.errorHandlerMiddleware);
 const start = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         //connectDb
+        yield (0, connect_1.connectDB)(process.env.MONGO_URI);
         app.listen(port, () => {
-            `Server is listening port ${port}`;
+            console.log(`Server is listening port ${port}`);
         });
     }
     catch (error) {
