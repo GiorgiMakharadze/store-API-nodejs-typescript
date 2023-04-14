@@ -8,14 +8,34 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllProducts = exports.getAllProductsStatic = void 0;
+const product_1 = __importDefault(require("../models/product"));
 const getAllProductsStatic = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    throw new Error("Testins async errors");
-    res.status(200).json({ message: "Product testing route" });
+    const search = "a";
+    const products = yield product_1.default.find({
+        name: { $regex: search, $options: "i" },
+    });
+    res.status(200).json({ products, nbHits: products.length });
 });
 exports.getAllProductsStatic = getAllProductsStatic;
 const getAllProducts = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.status(200).json({ message: "Product route" });
+    const { featured, company, name } = req.query;
+    const queryObject = {};
+    if (featured) {
+        queryObject.featured = featured === "true" ? true : false;
+    }
+    if (company) {
+        queryObject.company = company;
+    }
+    if (name) {
+        queryObject.name = { $regex: name, $options: "i" };
+    }
+    console.log(queryObject);
+    const products = yield product_1.default.find(queryObject);
+    res.status(200).json({ products, nbHits: products.length });
 });
 exports.getAllProducts = getAllProducts;

@@ -7,7 +7,5 @@ export const errorHandlerMiddleware = async (
   next: NextFunction
 ) => {
   console.log(err);
-  return res
-    .status(500)
-    .json({ message: "Something went wrong, please try again" });
+  return res.status(500).json({ message: "Something went wrong" });
 };
